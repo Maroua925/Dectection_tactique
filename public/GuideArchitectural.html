@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Architectural - TracTech</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            text-align: center;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: #3b50ff;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+.logo {
+    font-size: 38px;  /* Augmenté de 32px à 38px */
+    font-weight: 700;
+    color: white;
+    font-family: 'Forte', 'Playfair Display', cursive;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: #e0e0ff;
+}
+
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #e0e0ff;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s;
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .section {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            bottom: -10px;
+            left: 20%;
+            background-color: #3b50ff;
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 22px;
+            color: #3b50ff;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4a5568;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+            text-align: left;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 27%;
+            min-width: 260px;
+            max-width: 350px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            
+            /* Animation */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 80, 255, 0.15);
+        }
+
+        /* Effet de retard pour chaque carte */
+        .card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        /* Animation de montée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Nouvelle présentation des tactiques avec onglets */
+        .tactics-container {
+            margin-top: 30px;
+        }
+
+        .tactics-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background-color: #e9eeff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            color: #3b50ff;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #d0d9ff;
+        }
+
+        .tab-button.active {
+            background-color: #3b50ff;
+            color: white;
+        }
+
+        .tactics-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .tactic-category {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .tactic-category.active {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tactic-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            width: calc(33.33% - 20px);
+            min-width: 280px;
+            flex-grow: 1;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .tactic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 80, 255, 0.1);
+        }
+
+        .tactic-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #3b50ff;
+        }
+
+        .tactic-card h3 {
+            margin-top: 0;
+        }
+
+        /* Nouvelle présentation de l'importance */
+        .importance-section {
+            background: linear-gradient(to right, #eef0ff, #f0f4ff);
+            padding: 50px 20px;
+            border-radius: 15px;
+            margin: 40px auto;
+        }
+
+        .importance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .importance-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left;
+        }
+
+        .importance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(59, 80, 255, 0.12);
+        }
+
+        .importance-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .importance-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #3b50ff;
+        }
+
+        .importance-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        footer {
+            background-color: #3b50ff;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            nav {
+                margin-top: 15px;
+            }
+            
+            nav a {
+                margin: 0 10px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .tactic-card {
+                width: 100%;
+            }
+            
+            .importance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">TracTech🔍</div>
+        <nav>
+            <a href="home.html">Accueil</a>
+            <a href="GuideArchitectural.html">Guide Architectural </a>
+            <a href="index.html">TactiqueDetector</a>
+        </nav>
+    </header>
+
+    <div class="section">
+        <h2>Tactiques Architecturales dans les Logiciels</h2>
+        <p class="center-text">GrammaTech est un outil avancé conçu pour analyser les traces d'exécution des logiciels et détecter des tactiques architecturales grâce à JavaCC et aux grammaires XPG.</p>
+
+        <div class="cards">
+            <div class="card">
+                <h3>📌 Diagramme de Séquence UML</h3>
+                <p>Les diagrammes de séquence UML illustrent les interactions entre composants d'un système, permettant de visualiser l'exécution logicielle et d'identifier des tactiques architecturales.</p>
+            </div>
+            <div class="card">
+                <h3>📌 Grammaire XPG</h3>
+                <p>XPG est un formalisme décrivant la structure syntaxique des langages, facilitant l'analyse et la détection des tactiques architecturales dans les traces d'exécution.</p>
+            </div>
+            <div class="card">
+                <h3>📌 JavaCC</h3>
+                <p>JavaCC est un générateur de parseurs utilisé pour analyser les fichiers textes et identifier des motifs spécifiques dans les traces d'exécution, révélant des tactiques architecturales.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Qu'est-ce qu'une Tactique Architecturale?</h2>
+        <p>Une tactique architecturale est une décision de conception qui influence la manière dont un attribut de qualité est atteint dans un système logiciel. Il s'agit d'une approche fondamentale qui résout un problème architectural spécifique et qui contribue à satisfaire des exigences non fonctionnelles comme la performance, la disponibilité, la modifiabilité, la sécurité, etc.</p>
+        
+        <p>Contrairement aux patrons de conception qui sont des solutions pour des problèmes récurrents au niveau du code, les tactiques architecturales se situent à un niveau plus élevé d'abstraction et affectent la structure globale du système. Elles représentent les blocs de construction fondamentaux utilisés pour concevoir l'architecture d'un système logiciel.</p>
+    </div>
+
+    <div class="section">
+        <h2>Types de Tactiques Architecturales</h2>
+        <p class="center-text">Les tactiques architecturales sont regroupées selon les attributs de qualité qu'elles visent à améliorer. Explorez chaque catégorie pour découvrir les tactiques spécifiques.</p>
+
+        <div class="tactics-container">
+            <div class="tactics-tabs">
+                <button class="tab-button active" onclick="openTactic('disponibilite')">Disponibilité</button>
+                <button class="tab-button" onclick="openTactic('performance')">Performance</button>
+                <button class="tab-button" onclick="openTactic('modifiabilite')">Modifiabilité</button>
+                <button class="tab-button" onclick="openTactic('securite')">Sécurité</button>
+                <button class="tab-button" onclick="openTactic('testabilite')">Testabilité</button>
+                <button class="tab-button" onclick="openTactic('convivialite')">Convivialité</button>
+            </div>
+
+            <div class="tactics-content">
+                <div id="disponibilite" class="tactic-category active">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔄</div>
+                        <h3>Détection des Pannes</h3>
+                        <p>Mécanismes permettant d'identifier les défaillances dans le système avant qu'elles n'affectent les utilisateurs. Incluent la surveillance des performances et les tests périodiques.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔙</div>
+                        <h3>Récupération des Pannes</h3>
+                        <p>Stratégies pour restaurer le service après une défaillance, comme le retour à un état antérieur connu ou le redémarrage des composants défaillants.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🛡️</div>
+                        <h3>Prévention des Pannes</h3>
+                        <p>Techniques visant à éviter les défaillances avant qu'elles ne se produisent, comme l'élimination des exceptions et les validations d'entrée.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔄</div>
+                        <h3>Redondance</h3>
+                        <p>Utilisation de composants ou ressources dupliqués pour maintenir le service en cas de défaillance, incluant la réplication active, passive ou de vote.</p>
+                    </div>
+                </div>
+
+                <div id="performance" class="tactic-category">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">⚖️</div>
+                        <h3>Contrôle de la Demande</h3>
+                        <p>Techniques pour gérer la charge de travail du système, comme la limitation du taux de requêtes et l'ordonnancement des tâches.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">📊</div>
+                        <h3>Gestion des Ressources</h3>
+                        <p>Stratégies pour utiliser efficacement les ressources système, comme la mise en cache et le pooling de ressources.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">⏱️</div>
+                        <h3>Arbitrage des Ressources</h3>
+                        <p>Mécanismes pour décider quand et comment les ressources sont allouées entre les processus concurrents, comme les politiques de priorité.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔀</div>
+                        <h3>Parallélisation</h3>
+                        <p>Techniques permettant d'exécuter plusieurs opérations simultanément pour améliorer le débit, comme le multithreading et le traitement distribué.</p>
+                    </div>
+                </div>
+
+                <div id="modifiabilite" class="tactic-category">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">📏</div>
+                        <h3>Réduction de la Taille des Modules</h3>
+                        <p>Diviser le système en composants plus petits et plus faciles à maintenir, permettant des modifications localisées sans effets secondaires étendus.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔄</div>
+                        <h3>Augmentation de la Cohésion</h3>
+                        <p>Regrouper les fonctionnalités liées dans des modules cohérents pour faciliter les modifications futures et réduire les interdépendances.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔗</div>
+                        <h3>Réduction du Couplage</h3>
+                        <p>Minimiser les dépendances entre composants pour permettre des modifications indépendantes et réduire l'impact des changements.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">⏳</div>
+                        <h3>Différer la Liaison</h3>
+                        <p>Repousser les décisions de conception jusqu'au dernier moment possible, permettant plus de flexibilité pour les modifications futures.</p>
+                    </div>
+                </div>
+
+                <div id="securite" class="tactic-category">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔐</div>
+                        <h3>Authentification</h3>
+                        <p>Mécanismes pour vérifier l'identité des utilisateurs ou des systèmes, comme les mots de passe et l'authentification à deux facteurs.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔒</div>
+                        <h3>Autorisation</h3>
+                        <p>Contrôles permettant de déterminer si un utilisateur authentifié a le droit d'accéder à certaines ressources ou fonctionnalités.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🕵️</div>
+                        <h3>Détection d'Intrusion</h3>
+                        <p>Systèmes qui surveillent les activités suspectes et identifient les tentatives potentielles de violation de sécurité.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">📝</div>
+                        <h3>Non-répudiation</h3>
+                        <p>Techniques garantissant qu'un utilisateur ne peut pas nier avoir effectué une action, via la journalisation sécurisée et les signatures numériques.</p>
+                    </div>
+                </div>
+
+                <div id="testabilite" class="tactic-category">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🔍</div>
+                        <h3>Contrôle et Observation des États</h3>
+                        <p>Mécanismes permettant de manipuler et d'examiner l'état interne du système pour faciliter les tests.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🧩</div>
+                        <h3>Limitation de la Complexité Structurelle</h3>
+                        <p>Conception simplifiée qui réduit le nombre de chemins d'exécution possibles à tester et facilite la compréhension du système.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🧪</div>
+                        <h3>Isolation des Tests</h3>
+                        <p>Techniques permettant de tester des composants individuellement, comme l'utilisation de mocks, stubs et interfaces bien définies.</p>
+                    </div>
+                </div>
+
+                <div id="convivialite" class="tactic-category">
+                    <div class="tactic-card">
+                        <div class="tactic-icon">🖼️</div>
+                        <h3>Séparation de l'Interface Utilisateur</h3>
+                        <p>Découplage de l'interface utilisateur du reste du système pour permettre des modifications indépendantes et plusieurs interfaces alternatives.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">💡</div>
+                        <h3>Initiative du Système</h3>
+                        <p>Fonctionnalités qui anticipent les besoins de l'utilisateur et offrent de l'aide proactive ou des suggestions.</p>
+                    </div>
+                    <div class="tactic-card">
+                        <div class="tactic-icon">👤</div>
+                        <h3>Modèle Utilisateur</h3>
+                        <p>Techniques permettant au système de s'adapter aux préférences, comportements et niveaux de compétence des utilisateurs individuels.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="importance-section">
+        <h2>Importance de la Détection des Tactiques Architecturales</h2>
+        
+        <div class="importance-grid">
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">🧠</div>
+                    <div class="importance-title">Compréhension des Systèmes Complexes</div>
+                </div>
+                <p>Permet de comprendre comment les systèmes existants ont été conçus, particulièrement utile lorsque la documentation est insuffisante ou obsolète.</p>
+            </div>
+            
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">✅</div>
+                    <div class="importance-title">Vérification de Conformité</div>
+                </div>
+                <p>Aide à vérifier si l'implémentation d'un système correspond à l'architecture initialement conçue.</p>
+            </div>
+            
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">⚠️</div>
+                    <div class="importance-title">Détection des Anti-patterns</div>
+                </div>
+                <p>Facilite l'identification des mauvaises pratiques architecturales qui pourraient compromettre la qualité du logiciel.</p>
+            </div>
+            
+
+            
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">⚡</div>
+                    <div class="importance-title">Optimisation des Performances</div>
+                </div>
+                <p>Permet d'identifier les goulots d'étranglement et les inefficacités architecturales qui limitent les performances.</p>
+            </div>
+            
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">🔧</div>
+                    <div class="importance-title">Maintenance Simplifiée</div>
+                </div>
+                <p>Une meilleure compréhension de l'architecture réduit le temps et les efforts nécessaires pour la maintenance.</p>
+            </div>
+            
+            <div class="importance-card">
+                <div class="importance-header">
+                    <div class="importance-icon">🔒</div>
+                    <div class="importance-title">Analyse de la Sécurité</div>
+                </div>
+                <p>Aide à identifier les vulnérabilités potentielles dans l'architecture du système et à évaluer l'efficacité des tactiques de sécurité.</p>
+            </div>
+        </div>
+        
+        <p class="center-text" style="margin-top: 30px;">Grâce à GrammaTech, l'analyse automatisée des traces d'exécution permet d'extraire et de visualiser ces tactiques architecturales, offrant ainsi une vision approfondie de la structure et du comportement d'un système logiciel.</p>
+    </div>
+
+    <footer>
+        &copy; 2025 GrammaTech. Tous droits réservés.
+    </footer>
+
+    <script>
+        function openTactic(tacticName) {
+            // Cacher toutes les catégories
+            var categories = document.getElementsByClassName("tactic-category");
+            for (var i = 0; i < categories.length; i++) {
+                categories[i].classList.remove("active");
+            }
+            
+            // Afficher la catégorie sélectionnée
+            document.getElementById(tacticName).classList.add("active");
+            
+            // Mettre à jour les boutons
+            var buttons = document.getElementsByClassName("tab-button");
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            
+            // Activer le bouton cliqué
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+// TP : Système de Gestion Intelligente de Transport Urbain
+
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+abstract class Personne {
+    protected String nom;
+    protected String prenom;
+    protected LocalDate dateNaissance;
+
+    public Personne(String nom, String prenom, LocalDate dateNaissance) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+    }
+
+    public int getAge() {
+        return Period.between(dateNaissance, LocalDate.now()).getYears();
+    }
+
+    public abstract void afficherInfos();
+}
+
+class TitreTransport {
+    private String type;
+    private LocalDate dateEmission;
+    private int dureeValidite; // en jours
+    private boolean reduit;
+
+    public TitreTransport(String type, LocalDate dateEmission, int dureeValidite, boolean reduit) {
+        this.type = type;
+        this.dateEmission = dateEmission;
+        this.dureeValidite = dureeValidite;
+        this.reduit = reduit;
+    }
+
+    public boolean estValide() {
+        return LocalDate.now().isBefore(getDateExpiration());
+    }
+
+    public LocalDate getDateExpiration() {
+        return dateEmission.plusDays(dureeValidite);
+    }
+
+    public void afficherInfos() {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        System.out.println("Type: " + type + ", Emis le: " + dateEmission.format(fmt)
+            + ", Expire le: " + getDateExpiration().format(fmt)
+            + ", Tarif réduit: " + (reduit ? "Oui" : "Non"));
+    }
+}
+
+class Amende {
+    private LocalDate date;
+    private String motif;
+    private double montant;
+    private boolean payee;
+
+    public Amende(String motif, double montant) {
+        this.date = LocalDate.now();
+        this.motif = motif;
+        this.montant = montant;
+        this.payee = false;
+    }
+
+    public void payer() {
+        this.payee = true;
+    }
+
+    public boolean estPayee() {
+        return payee;
+    }
+
+    public void afficherInfos() {
+        System.out.println("Amende du " + date + ", Motif: " + motif + ", Montant: " + montant + " €, Payée: " + (payee ? "Oui" : "Non"));
+    }
+}
+
+class Usager extends Personne {
+    private int idUsager;
+    private List<TitreTransport> titres;
+    private List<Amende> amendes;
+
+    public Usager(String nom, String prenom, LocalDate naissance, int idUsager) {
+        super(nom, prenom, naissance);
+        this.idUsager = idUsager;
+        this.titres = new ArrayList<>();
+        this.amendes = new ArrayList<>();
+    }
+
+    public void ajouterTitre(TitreTransport t) {
+        titres.add(t);
+    }
+
+    public void ajouterAmende(Amende a) {
+        amendes.add(a);
+    }
+
+    public List<TitreTransport> getTitresValides() {
+        List<TitreTransport> valides = new ArrayList<>();
+        for (TitreTransport t : titres) {
+            if (t.estValide()) valides.add(t);
+        }
+        return valides;
+    }
+
+    public List<Amende> getAmendes() {
+        return amendes;
+    }
+
+    public void afficherInfos() {
+        System.out.println("--- Usager " + prenom + " " + nom + " (" + getAge() + " ans) ---");
+        System.out.println("Titres de transport :");
+        for (TitreTransport t : titres) t.afficherInfos();
+        System.out.println("Amendes :");
+        for (Amende a : amendes) a.afficherInfos();
+    }
+}
+
+class Employe extends Personne {
+    private int matricule;
+    private String zone;
+
+    public Employe(String nom, String prenom, LocalDate naissance, int matricule, String zone) {
+        super(nom, prenom, naissance);
+        this.matricule = matricule;
+        this.zone = zone;
+    }
+
+    public void verifierUsager(Usager u) {
+        System.out.println("Contrôle de l'usager " + u.nom + " " + u.prenom + ":");
+        if (u.getTitresValides().isEmpty()) {
+            System.out.println("Aucun titre valide !");
+            emettreAmende(u, "Absence de titre", 50.0);
+        } else {
+            System.out.println("Titre valide trouvé. Aucun problème.");
+        }
+    }
+
+    public void emettreAmende(Usager u, String motif, double montant) {
+        Amende a = new Amende(motif, montant);
+        u.ajouterAmende(a);
+    }
+
+    public void afficherInfos() {
+        System.out.println("Employé : " + prenom + " " + nom + " | Matricule : " + matricule + " | Zone : " + zone);
+    }
+}
+
+public class TestTransport {
+    public static void main(String[] args) {
+        Usager u1 = new Usager("Benali", "Sami", LocalDate.of(2001, 6, 4), 101);
+        Usager u2 = new Usager("Yahia", "Kenza", LocalDate.of(1995, 2, 15), 102);
+
+        TitreTransport t1 = new TitreTransport("mensuel", LocalDate.now().minusDays(10), 30, false);
+        TitreTransport t2 = new TitreTransport("ticket", LocalDate.now().minusDays(50), 1, false);
+
+        u1.ajouterTitre(t1); // valide
+        u2.ajouterTitre(t2); // expiré
+
+        Employe e1 = new Employe("Brahimi", "Nour", LocalDate.of(1980, 3, 10), 5001, "Centre");
+
+        e1.verifierUsager(u1);
+        e1.verifierUsager(u2);
+
+        System.out.println();
+        u1.afficherInfos();
+        System.out.println();
+        u2.afficherInfos();
+    }
+}

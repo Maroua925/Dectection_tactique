@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trace Analyzer - GrammaTech</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background-color: #3b50ff;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 38px;
+      font-weight: 700;
+      color: white;
+      font-family: 'Forte', 'Playfair Display', cursive;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #e0e0ff;
+    }
+
+    nav a:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: white;
+      transition: width 0.3s;
+    }
+
+    nav a:hover:after {
+      width: 100%;
+    }
+
+    .explore-section {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: #2d3748;
+      position: relative;
+      text-align: center;
+    }
+
+    .page-title:after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #3b50ff;
+      border-radius: 2px;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+    }
+
+    .step {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      flex: 1;
+      min-width: 200px;
+      max-width: 300px;
+      min-height: 150px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease-out forwards;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(59, 80, 255, 0.15);
+    }
+
+    .step:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .step:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .step:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #2d3748;
+    }
+
+    .step p {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+
+    .upload-section {
+      margin-top: 50px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .upload-section p {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #2d3748;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .file-input-container {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .file-label {
+      display: block;
+      background-color: #eef0ff;
+      padding: 12px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #3b50ff;
+      transition: all 0.3s ease;
+      text-align: center;
+      border: 2px solid #3b50ff;
+      box-shadow: 0 4px 6px rgba(59, 80, 255, 0.1);
+    }
+
+    .file-label:hover {
+      background-color: #dce0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 10px rgba(59, 80, 255, 0.15);
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    #file-name {
+      font-size: 15px;
+      color: #4a5568;
+      margin-top: 10px;
+      display: block;
+      font-weight: 500;
+    }
+
+    .upload-btn {
+      background-color: #3b50ff;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(59, 80, 255, 0.2);
+    }
+
+    .upload-btn:hover {
+      background-color: #2a3fec;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(59, 80, 255, 0.3);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding-top: 60px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #2d3748;
+      position: relative;
+    }
+
+    .modal-header:after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 3px;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #3b50ff;
+      border-radius: 2px;
+    }
+
+    .modal-btn {
+      background-color: #3b50ff;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn:hover {
+      background-color: #2a3fec;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3b50ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Results Section */
+    .results-section {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin: 30px auto;
+      max-width: 900px;
+      display: none;
+    }
+
+    .results-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .results-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #a0aec0;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: #3b50ff;
+    }
+
+    .results-content {
+      text-align: left;
+      white-space: pre-wrap;
+      font-family: monospace;
+      background: #f7f7fa;
+      padding: 20px;
+      border-radius: 8px;
+      max-height: 500px;
+      overflow-y: auto;
+      border: 1px solid #e2e8f0;
+    }
+
+    .error-message {
+      background-color: #fff0f0;
+      border-left: 4px solid #ff3b3b;
+      padding: 12px;
+      margin-top: 15px;
+      color: #d32f2f;
+      border-radius: 4px;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    footer {
+      background-color: #3b50ff;
+      height: 60px;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      line-height: 60px;
+      width: 100%;
+      margin-top: 50px;
+    }
+
+    /* Styles pour l'affichage amélioré des erreurs */
+.error-panel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(59, 80, 255, 0.1);
+  margin: 20px 0;
+  overflow: hidden;
+  transform-origin: top;
+  animation: slideIn 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-header {
+  background: linear-gradient(135deg, #3b50ff, #6978ff);
+  color: white;
+  padding: 15px 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.error-header .error-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.error-header .error-icon {
+  font-size: 20px;
+}
+
+.error-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.error-content.show {
+  padding: 20px;
+  max-height: 300px; /* Fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.toggle-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Style pour chaque ligne d'erreur */
+.error-line {
+  background: #f8fafd;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid #fb6340;
+  display: flex;
+  align-items: flex-start;
+  transform: translateX(-20px);
+  opacity: 0;
+  animation: fadeInRight 0.4s ease forwards;
+}
+
+.error-line:nth-child(1) { animation-delay: 0.1s; }
+.error-line:nth-child(2) { animation-delay: 0.2s; }
+.error-line:nth-child(3) { animation-delay: 0.3s; }
+.error-line:nth-child(4) { animation-delay: 0.4s; }
+.error-line:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.error-line-number {
+  background: #fb6340;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 12px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.error-message {
+  flex-grow: 1;
+}
+
+.error-details {
+  margin-top: 10px;
+}
+
+.error-detail-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 8px 10px;
+  background: rgba(59, 80, 255, 0.05);
+  border-radius: 6px;
+  font-size: 14px;
+  animation: pulse 1s infinite alternate;
+  animation-delay: calc(var(--item-index) * 0.2s);
+}
+
+.error-detail-item:nth-child(1) { --item-index: 1; }
+.error-detail-item:nth-child(2) { --item-index: 2; }
+.error-detail-item:nth-child(3) { --item-index: 3; }
+.error-detail-item:nth-child(4) { --item-index: 4; }
+.error-detail-item:nth-child(5) { --item-index: 5; }
+
+@keyframes pulse {
+  0% {
+    background: rgba(59, 80, 255, 0.05);
+  }
+  100% {
+    background: rgba(59, 80, 255, 0.1);
+  }
+}
+
+.error-detail-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background: #3b50ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+}
+
+.error-content-preview {
+  font-family: 'Courier New', monospace;
+  background: #f0f4ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #3b50ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-content-preview::before {
+  content: "Contenu:";
+  position: absolute;
+  top: 2px;
+  left: 0;
+  background: #3b50ff;
+  color: white;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 0 0 4px 0;
+}
+
+/* Style pour le format requis */
+.format-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(59, 80, 255, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+  border-top: 5px solid #3b50ff;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.format-title {
+  color: #3b50ff;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.format-code {
+  background: #f0f4ff;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  color: #3b50ff;
+  border: 1px dashed #3b50ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.format-code::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #3b50ff;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* Animation pour le compteur d'erreurs */
+.error-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  background: #ff3860;
+  color: white;
+  border-radius: 12px;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 0 6px;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+/* Style pour message de succès */
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ebffef;
+  border-left: 4px solid #34D399;
+  padding: 15px;
+  border-radius: 8px;
+  color: #065f46;
+  font-weight: 500;
+  animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.success-icon {
+  font-size: 20px;
+}
+    /* Style amélioré pour les puces */
+    .detail-item::before {
+      content: '•';
+      color: #3b50ff;
+      margin-right: 12px;
+      font-size: 1.1em;
+    }
+
+    /* Style amélioré pour le lien des détails */
+    .details-link {
+      color: #3b50ff;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      margin: 10px 0;
+      font-weight: 500;
+      padding: 6px 12px;
+      border: 1px solid #3b50ff;
+      border-radius: 20px;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    .details-link:hover {
+      color: white;
+      background-color: #3b50ff;
+      text-decoration: none;
+    }
+
+    /* Styles améliorés pour la section de guide de format */
+    .format-guide {
+      background: linear-gradient(to bottom right, #f8f9fc, #f0f4ff);
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 40px;
+      box-shadow: 0 4px 15px rgba(59, 80, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .format-guide:hover {
+      box-shadow: 0 8px 25px rgba(59, 80, 255, 0.15);
+      transform: translateY(-3px);
+    }
+
+    /* Format requis avec style moderne et couleurs harmonieuses */
+    .format-required {
+      background: #f0f4ff;
+      border-left: 4px solid #3b50ff;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .format-required h3 {
+      color: #3b50ff;
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .format-required h3:before {
+      content: '⚠️';
+    }
+
+    /* Style amélioré pour l'exemple de format */
+    .format-example {
+      background: #f8f9fc;
+      border-left: 4px solid #3b50ff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(59, 80, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .format-example:hover {
+      box-shadow: 0 4px 12px rgba(59, 80, 255, 0.15);
+    }
+
+    .format-example h3 {
+      color: #2d3748;
+      margin-top: 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .format-example h3:before {
+      content: '📑';
+    }
+
+    /* Style amélioré pour le code */
+    pre {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 10px 0;
+      border: 1px solid #e2e8f0;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    /* Style pour le snippet de code */
+    .format-code {
+      background: #f0f4ff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      display: inline-block;
+      margin: 5px 0;
+      font-weight: 500;
+      color: #3b50ff;
+      border: 1px dashed #3b50ff;
+    }
+
+    /* Style pour le texte de code inline */
+    code {
+      background: #f5f7fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #3b50ff;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Style pour les indicateurs visuels */
+    .visual-indicator {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 1.2em;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 768px) {
+      .steps {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .step {
+        max-width: 100%;
+      }
+
+      header {
+        padding: 15px 20px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav {
+        margin-top: 15px;
+      }
+
+      nav a {
+        margin: 0 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">TracTech🔍</div>
+    <nav>
+      <a href="home.html">Accueil</a>
+      <a href="GuideArchitectural.html">Guide Architectural</a>
+      <a href="index.html">TactiqueDetector</a>
+    </nav>
+  </header>
+
+  <div class="explore-section">
+    <h2 class="page-title">Trace Analyzer - Analyse Avancée d'Exécution</h2>
+
+    <div class="steps">
+      <div class="step">
+        <h3>📌 Étape 1</h3>
+        <p>Importez votre fichier de trace d'exécution au format requis</p>
+      </div>
+      <div class="step">
+        <h3>📌 Étape 2</h3>
+        <p>Choisissez la tactique architecturale à identifier</p>
+      </div>
+      <div class="step">
+        <h3>📌 Étape 3</h3>
+        <p>Visualisez les résultats détaillés de votre analyse</p>
+      </div>
+    </div>
+
+    <!-- Section de guide de format améliorée -->
+    <div class="format-guide">
+      <div class="format-required">
+        <h3>Format requis</h3>
+        <div class="format-code">CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;</div>
+        <p style="margin-top: 10px; color: #5a6270;">Chaque ligne doit suivre strictement ce format pour être traitée correctement.</p>
+      </div>
+
+      <div class="format-example">
+        <h3>Exemple de trace valide</h3>
+        <pre>CALLER:A,METHOD:receive,CALLEE:B;
+CALLER:B,METHOD:receive,CALLEE:B;
+CALLER:B,METHOD:receive,CALLEE:B;
+CALLER:A,METHOD:validat,CALLEE:A;
+CALLER:A,METHOD:receive,CALLEE:B;</pre>
+        <p style="margin-top: 10px; color: #5a6270;">Cet exemple montre une trace d'exécution valide qui sera correctement analysée par notre système.</p>
+      </div>
+    </div>
+
+    <div class="upload-section">
+      <p>Commencez votre analyse de trace d'exécution</p>
+
+      <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <div class="file-input-container">
+          <label class="file-label" for="file">📁 Sélectionner un fichier</label>
+          <input type="file" name="textfile" id="file" accept=".txt" required>
+          <span id="file-name">Aucun fichier sélectionné</span>
+        </div>
+
+        <!-- Champ caché pour stocker la tactique -->
+        <input type="hidden" name="tactic" id="tacticInput">
+        <input type="hidden" id="tacticName" name="tacticName">
+
+        <button type="button" class="upload-btn" id="analyzeBtn">Analyser le fichier</button>
+      </form>
+
+      <div class="spinner" id="spinner"></div>
+      <div class="status-message" id="status-message"></div>
+    </div>
+
+    <div class="results-section" id="results-section">
+      <div class="results-header">
+        <div class="results-title">Résultats de l'analyse</div>
+        <button class="close-btn" id="close-results">✕</button>
+      </div>
+      <div class="results-content" id="results-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal de sélection des tactiques -->
+  <div id="tacticModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Choisissez une tactique</div>
+      <button class="modal-btn" data-tactic="AuthenticateIDPasswordTacticGrammaire">Authentication ID/Password</button>
+      <button class="modal-btn" data-tactic="authenticateonetimePasswordTacticGrammaire">Authenticate Onetime Password</button>
+      <button class="modal-btn" data-tactic="MaintainDataTacticGrammaire">Maintain Data</button>
+      <button class="modal-btn" data-tactic="AuthorizeuserTacticGrammaire">Authorizeuser</button>
+      <button class="modal-btn" data-tactic="MaintainMultipleCopieTacticGrammaire">Maintain Multiple Copie</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('uploadForm');
+      const fileInput = document.getElementById('file');
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const tacticModal = document.getElementById('tacticModal');
+      const tacticInput = document.getElementById('tacticInput');
+
+      // Fonction améliorée pour valider le fichier de trace
+function validateTraceFile(fileContent) {
+  const lines = fileContent.trim().split('\n');
+  
+  if (lines.length === 0) {
+    return {
+      isValid: false,
+      generalMessage: "Format requis : CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;",
+      details: ["Le fichier est vide."]
+    };
+  }
+
+  const errors = [];
+  const linePattern = /^CALLER:[^,]+,METHOD:[^,]+,CALLEE:[^;]+;$/;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    const lineErrors = [];
+
+    if (!line) {
+      lineErrors.push({
+        line: i + 1,
+        message: "Ligne vide",
+        details: []
+      });
+    } else if (!linePattern.test(line)) {
+      const details = [];
+      
+      if (!line.includes('CALLER:')) details.push("CALLER manquant");
+      if (!line.includes('METHOD:')) details.push("METHOD manquant");
+      if (!line.includes('CALLEE:')) details.push("CALLEE manquant");
+      if (!line.includes(',')) details.push("Séparateur ',' manquant");
+      if (!line.endsWith(';')) details.push("Terminateur ';' manquant");
+      
+      lineErrors.push({
+        line: i + 1,
+        message: "Format incorrect",
+        details: details,
+        content: line
+      });
+    }
+
+    if (lineErrors.length > 0) {
+      errors.push(...lineErrors);
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    generalMessage: "Format requis : CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;",
+    details: errors,
+    errorCount: errors.length
+  };
+}
+      // Gestionnaire amélioré pour le changement de fichier
+fileInput.addEventListener('change', function() {
+  const fileNameSpan = document.getElementById('file-name');
+  const statusMessage = document.getElementById('status-message');
+  const file = this.files[0];
+  
+  if (file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      const validationResult = validateTraceFile(e.target.result);
+      
+      // Effacer ancien état
+      fileNameSpan.textContent = file.name;
+      statusMessage.innerHTML = "";
+
+      if (validationResult.isValid) {
+        statusMessage.innerHTML = `
+          <div class="success-message">
+            <div class="success-icon">✅</div>
+            <span>Fichier valide et prêt à être analysé</span>
+          </div>
+        `;
+      } else {
+        // Création du panneau d'erreur avec animations
+        const errorPanel = document.createElement('div');
+        errorPanel.className = 'error-panel';
+        
+        // Format requis avec animation
+        const formatCard = document.createElement('div');
+        formatCard.className = 'format-card';
+        formatCard.innerHTML = `
+          <h3 class="format-title">Format requis</h3>
+          <div class="format-code">CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;</div>
+          <p>Chaque ligne doit suivre strictement ce format pour être traitée correctement.</p>
+        `;
+        
+        // En-tête du panneau d'erreur
+        const errorHeader = document.createElement('div');
+        errorHeader.className = 'error-header';
+        errorHeader.innerHTML = `
+          <div class="error-title">
+            <div class="error-icon">⚠️</div>
+            Format invalide détecté
+            <span class="error-counter">${validationResult.errorCount}</span>
+          </div>
+          <button class="toggle-btn">
+            <span>Détails</span>
+            <span class="toggle-icon">▼</span>
+          </button>
+        `;
+        
+        // Contenu des erreurs
+        const errorContent = document.createElement('div');
+        errorContent.className = 'error-content';
+        
+        // Génération des lignes d'erreur
+        validationResult.details.forEach(error => {
+          const errorLine = document.createElement('div');
+          errorLine.className = 'error-line';
+          
+          let detailsHtml = '';
+          if (error.details && error.details.length > 0) {
+            detailsHtml = '<div class="error-details">';
+            error.details.forEach(detail => {
+              detailsHtml += `
+                <div class="error-detail-item">
+                  <div class="error-detail-icon">!</div>
+                  <span>${detail}</span>
+                </div>
+              `;
+            });
+            detailsHtml += '</div>';
+          }
+          
+          errorLine.innerHTML = `
+            <div class="error-line-number">${error.line}</div>
+            <div class="error-message">
+              ${error.message}
+              ${detailsHtml}
+              ${error.content ? `<div class="error-content-preview">${error.content}</div>` : ''}
+            </div>
+          `;
+          
+          errorContent.appendChild(errorLine);
+        });
+        
+        // Assembler le panneau d'erreur
+        errorPanel.appendChild(errorHeader);
+        errorPanel.appendChild(errorContent);
+        
+        // Ajouter à la page
+        statusMessage.appendChild(formatCard);
+        statusMessage.appendChild(errorPanel);
+        
+        // Ajouter les gestionnaires d'événements
+        const toggleBtn = errorPanel.querySelector('.toggle-btn');
+        toggleBtn.addEventListener('click', function() {
+          const content = errorPanel.querySelector('.error-content');
+          content.classList.toggle('show');
+          
+          const icon = this.querySelector('.toggle-icon');
+          icon.classList.toggle('rotate');
+          
+          this.querySelector('span:first-child').textContent = 
+            content.classList.contains('show') ? "Masquer" : "Détails";
+        });
+        
+        // Ouvrir automatiquement le panneau après un court délai
+        setTimeout(() => {
+          toggleBtn.click();
+        }, 500);
+      }
+    };
+    
+    reader.readAsText(file);
+  } else {
+    fileNameSpan.textContent = "Aucun fichier sélectionné";
+    statusMessage.innerHTML = "";
+  }
+});
+
+      // Gestionnaire pour le bouton d'analyse
+      analyzeBtn.addEventListener('click', function() {
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+
+          reader.onload = function(e) {
+            const fileContent = e.target.result;
+            const validationResult = validateTraceFile(fileContent);
+
+      if (validationResult.isValid) {
+        tacticModal.style.display = 'block'; // Affiche la modale de tactiques
+      } else {
+        alert("Vous ne pouvez pas analyser une trace de format non valide.\n\nFormat requis :\nCALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;\n\nExemple valide :\nCALLER:A,METHOD:validate,CALLEE:A;");        }
+    };
+
+    reader.readAsText(file); // Lire le fichier
+  } else {
+    alert("Veuillez d'abord sélectionner un fichier.");
+  }
+});
+
+
+
+
+        document.querySelectorAll('.modal-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    tacticInput.value = this.dataset.tactic;
+    document.getElementById('tacticName').value = this.textContent.trim(); // Récupère le nom affiché
+    tacticModal.style.display = 'none';
+    form.submit();
+  });
+});
+      });
+
+
+
+
+    </script>
+
+  </div>
+
+  <footer>
+    &copy; 2025 GrammaTech. Tous droits réservés.
+  </footer>
+
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "authenticateonetimePasswordTacticGrammaire",
+        "request": "launch",
+        "mainClass": "authenticateonetimePasswordTacticGrammaire",
+        "projectName": "JAvatest_86ef9b81"
+      },
+      {
+        "type": "java",
+        "name": "AuthenticateIDPasswordTacticGrammaire",
+        "request": "launch",
+        "mainClass": "AuthenticateIDPasswordTacticGrammaire",
+        "projectName": "JAvatest_86ef9b81"
+      },
+      {
+        "type": "java",
+        "name": "Lancer avec détection auto",
+        "request": "launch",
+        "mainClass": "AuthorizeuserTacticGrammaire",
+        "vmArgs": "-Xss4m",
+        "cwd": "${workspaceFolder}",
+        "console": "internalConsole"
+      }
+    ]
+  }

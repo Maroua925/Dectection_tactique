@@ -1,0 +1,60 @@
+Résultats d'analyse - 09/05/2025 08:28:32
+
+Tactique analysée: Maintain Multiple Copie
+Résultat: La tactique EXISTE dans la trace
+Nombre de vérifications: 5
+
+=== Fichier analysé ===
+1: CALLER:A,METHOD:receive,CALLEE:B;
+2: CALLER:B,METHOD:receive,CALLEE:C;
+3: CALLER:B,METHOD:receive,CALLEE:C;
+4: CALLER:C,METHOD:receive,CALLEE:D;
+5: CALLER:A,METHOD:receive,CALLEE:B;
+6: CALLER:B,METHOD:receive,CALLEE:C;
+7: CALLER:B,METHOD:receive,CALLEE:D;
+8: CALLER:B,METHOD:receive,CALLEE:D;
+9: CALLER:D,METHOD:receive,CALLEE:E;
+10: CALLER:A,METHOD:receive,CALLEE:B;
+11: CALLER:B,METHOD:receive,CALLEE:C;
+12: CALLER:B,METHOD:receive,CALLEE:D;
+13: CALLER:B,METHOD:receive,CALLEE:C;
+
+=== Résultats de l'analyse ===
+Analyse du fichier: 9d5b7c6d14d269a1d8a48efa9d937c7e
+____________________________________________________________________________
+La tactique correspondante se trouve dans la ligne 1
+Objets participants a la tactique: 
+Objet 1  -> A
+Objet 2  -> B
+Objet 3  -> C
+La tactique prend fin dans la ligne 2
+____________________________________________________________________________
+La tactique correspondante se trouve dans la ligne 3
+Objets participants a la tactique: 
+Objet 1  -> B
+Objet 2  -> C
+Objet 3  -> D
+La tactique prend fin dans la ligne 4
+____________________________________________________________________________
+La tactique correspondante se trouve dans la ligne 5
+Objets participants a la tactique: 
+Objet 1  -> A
+Objet 2  -> B
+Objet 3  -> C
+La tactique prend fin dans la ligne 6
+____________________________________________________________________________
+La tactique correspondante se trouve dans la ligne 8
+Objets participants a la tactique: 
+Objet 1  -> B
+Objet 2  -> D
+Objet 3  -> E
+La tactique prend fin dans la ligne 9
+____________________________________________________________________________
+La tactique correspondante se trouve dans la ligne 10
+Objets participants a la tactique: 
+Objet 1  -> A
+Objet 2  -> B
+Objet 3  -> C
+Objet 4 -> D
+Cette tactique inclut un bloc optionnel.
+La tactique prend fin dans la ligne 13

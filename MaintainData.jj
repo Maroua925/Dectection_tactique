@@ -1,0 +1,173 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options {
+  static = true;
+}
+
+PARSER_BEGIN(MaintainDataTacticGrammaire)
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
+import java.io.File;
+import java.io.FileInputStream;
+
+public class MaintainDataTacticGrammaire {
+  public static Map<String, String> map = new HashMap<String, String>();
+  public static Map<String, String> Var = new HashMap<String, String>();
+  public static Token exceptionHandlingCallee;
+  public static Map<String, String> tacticParticipatingObjects = new HashMap<String, String>();
+  public static int numberofChecks = 0;
+
+  private static File getLatestFile(String dirPath) {
+    File dir = new File(dirPath);
+    File[] files = dir.listFiles();
+    if (files == null || files.length == 0) {
+      return null;
+    }
+
+    File lastModifiedFile = files[0];
+    for (int i = 1; i < files.length; i++) {
+      if (files[i].lastModified() > lastModifiedFile.lastModified()) {
+        lastModifiedFile = files[i];
+      }
+    }
+    return lastModifiedFile;
+  }
+
+  public static void main(String args[]) throws ParseException {
+    try {
+      // Path to uploads directory - adjust as needed
+      String uploadsDirPath = System.getProperty("user.dir") + File.separator + "uploads";
+      File latestFile = getLatestFile(uploadsDirPath);
+      
+      if (latestFile == null) {
+        System.out.println("No files found in uploads directory");
+        return;
+      }
+      
+      System.out.println("Analyzing file: " + latestFile.getName());
+      MaintainDataTacticGrammaire parser = new MaintainDataTacticGrammaire(new FileInputStream(latestFile));
+
+      try {
+        parser.MaintainData();
+        System.out.println("Number of checks: " + numberofChecks);
+
+        if(!tacticParticipatingObjects.isEmpty()) { 
+          System.out.println("Tactic participating objects: ");
+          for(Map.Entry<String, String> entry : tacticParticipatingObjects.entrySet()) {
+            System.out.println(entry.getKey() + " --> " + entry.getValue());
+          }
+        }
+      } catch (Exception e) {
+        System.out.println("Error occurred during parsing:");
+        e.printStackTrace();
+      }
+    } catch(Exception e) {
+      System.out.println("Error initializing parser:");
+      e.printStackTrace();
+    }
+  }
+}
+
+PARSER_END(MaintainDataTacticGrammaire)
+
+SKIP : { " " | "\t" | "\n" | "\r" }
+
+TOKEN : { < LITERAL : (["a"-"z", "A"-"Z"])+ > }
+TOKEN : { < OBJ : (["a"-"z"])+ > }
+TOKEN : { < Method_Signature: "~"(["a"-"z"])+ > }
+TOKEN : { < OBJJ : (["a"-"z"])+ > }
+TOKEN : { < CALLER : "CALLER:" > }
+TOKEN : { < CALLEE : "CALLEE:" > }
+TOKEN : { < METHOD : "METHOD:" > }
+TOKEN : { < COMMA : "," > }
+TOKEN : { < COMMAP : ";" > }
+
+void MaintainData(): { }
+{
+  A() B() C()
+}
+
+void A(): { Token caller, callee; }
+{
+  <CALLER>
+  caller = <LITERAL> { map.put("caller", caller.image); Var.put("caller", caller.image); }
+  <COMMA> M()
+  callee = <LITERAL> { map.put("callee", callee.image); }
+  <COMMAP>
+  {
+    if (map.get("caller").equals(map.get("callee"))) {
+      return;
+    } else {
+      C(); 
+      return;
+    }
+  }
+}
+
+void B(): { Token caller, callee; }
+{
+  LOOKAHEAD({getToken(2).image.equals(map.get("callee"))})
+  (
+    <CALLER>
+    caller = <LITERAL> { map.put("caller", caller.image); }
+    <COMMA> M()
+    callee = <LITERAL> { map.put("callee", callee.image); }
+    <COMMAP>
+    {
+      if (caller.image.equals(callee.image)) {
+        B();
+        return;
+      } else {
+        E();
+      }
+    }
+  )
+  | { C(); return; }
+}
+
+void E(): { Token caller, callee; }
+{
+  LOOKAHEAD({getToken(2).image.equals(map.get("callee"))})
+  (
+    <CALLER>
+    caller = <LITERAL> { map.put("caller", caller.image); }
+    <COMMA> M()
+    callee = <LITERAL> { map.put("callee", callee.image); }
+    <COMMAP>
+    {
+      if (map.get("caller").equals(map.get("callee"))) {
+        System.out.println("____________________________________________________________________________");
+        System.out.println("La tactique correspondante se trouve dans la ligne  " +( caller.beginLine - 2) );
+
+        for (int i = 2; i >= 0; i--) {
+          System.out.println("Recursive call detected in E() at line " + (caller.beginLine - i));
+        }
+        System.out.println("La tactique prend fin dans la ligne " + caller.beginLine  );
+        System.out.println("Objets participants a la tactique :");
+        System.out.println("Objet 1  -> " + Var.get("caller"));
+        System.out.println("Objet 2  -> " + map.get("callee"));
+        numberofChecks++;
+        return;
+      } else {
+        C(); 
+        return;
+      }
+    }
+  )
+  | { C(); return; }
+}
+
+void C(): { Token caller, callee; }
+{
+  ( A() B() C() ) ?
+}
+
+void M(): {}
+{
+  <METHOD> <LITERAL> <COMMA> <CALLEE>
+}

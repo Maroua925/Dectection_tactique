@@ -1,0 +1,23 @@
+Résultats d'analyse - 09/05/2025 08:33:37
+
+Tactique analysée: Maintain Data
+Résultat: La tactique N'EXISTE PAS dans la trace
+Nombre de vérifications: 0
+
+=== Fichier analysé ===
+1: CALLER:A,METHOD:receive,CALLEE:B;
+2: CALLER:B,METHOD:receive,CALLEE:C;
+3: CALLER:B,METHOD:receive,CALLEE:C;
+4: CALLER:C,METHOD:receive,CALLEE:D;
+5: CALLER:A,METHOD:receive,CALLEE:B;
+6: CALLER:B,METHOD:receive,CALLEE:C;
+7: CALLER:B,METHOD:receive,CALLEE:D;
+8: CALLER:B,METHOD:receive,CALLEE:D;
+9: CALLER:D,METHOD:receive,CALLEE:E;
+10: CALLER:A,METHOD:receive,CALLEE:B;
+11: CALLER:B,METHOD:receive,CALLEE:C;
+12: CALLER:B,METHOD:receive,CALLEE:D;
+13: CALLER:B,METHOD:receive,CALLEE:C;
+
+=== Résultats de l'analyse ===
+Analyzing file: 7af9ee172e823594a75cc11218cedba5

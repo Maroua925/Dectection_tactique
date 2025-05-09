@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - TracTech</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+       
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: #3b50ff;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+.logo {
+    font-size: 38px;  /* Augmenté de 32px à 38px */
+    font-weight: 700;
+    color: white;
+    font-family: 'Forte', 'Playfair Display', cursive;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: #e0e0ff;
+}
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #e0e0ff;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s;
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .text-section {
+            max-width: 50%;
+            padding-right: 30px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+            position: relative;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            bottom: -10px;
+            left: 0;
+            background-color: #3b50ff;
+            border-radius: 2px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #3b50ff;
+            font-weight: 500;
+        }
+
+        .image-section {
+            max-width: 45%;
+            position: relative;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: auto;
+
+            transition: transform 0.5s ease;
+        }
+
+        .action-btn {
+            display: inline-block;
+            background-color: #3b50ff;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .action-btn:hover {
+            background-color: #2a3fec;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .features-section {
+            max-width: 1200px;
+            margin: 0 auto 50px auto;
+            padding: 20px;
+        }
+
+        .features-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(59, 80, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            color: #3b50ff;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .cta-section {
+            background-color: #eef0ff;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .cta-text {
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #4a5568;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: #3b50ff;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-btn:hover {
+            background-color: #2a3fec;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        footer {
+            background-color: #3b50ff;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .text-section {
+                max-width: 100%;
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+
+            .image-section {
+                max-width: 80%;
+            }
+
+            h2:after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">TracTech🔍</div>
+        <nav>
+            <a href="home.html">Accueil</a>
+            <a href="GuideArchitectural.html">Guide Architectural </a>
+            <a href="index.html">TactiqueDetector</a>
+        </nav>
+    </header>
+
+    <div class="container fade-in">
+        <div class="text-section">
+            <h2>Notre Vision</h2>
+            <p>
+            TactiScope révolutionne l'analyse des traces d'exécution logicielle en détectant automatiquement les <strong>tactiques architecturales</strong> cachées. Grâce à l'intégration intelligente de <strong>JavaCC</strong>, des <strong>diagrammes UML</strong> et des <strong>grammaires XPG</strong>, notre outil révèle les structures invisibles qui façonnent vos systèmes.
+            </p>
+            <p>
+            Notre technologie offre aux développeurs et architectes une vision approfondie des fondations logicielles, leur permettant d'optimiser la qualité, la robustesse et la maintenabilité des applications. Avec TactiScope, vous explorez l'architecture au-delà du code.
+            </p>
+        </div>
+        <div class="image-section">
+            <img src="image.png" alt="Analyse architecturale logicielle">
+        </div>
+    </div>
+
+    <div class="features-section">
+        <div class="features-title">
+            <h2>Nos Fonctionnalités</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📤</div>
+                <h3 class="feature-title">Dépôt de Traces</h3>
+                <p>Importez vos fichiers de traces d'exécution facilement sur notre plateforme pour analyse.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3 class="feature-title">Détection Automatisée</h3>
+                <p>Notre système détecte automatiquement les tactiques architecturales présentes dans vos traces.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Résultats Téléchargeables</h3>
+                <p>Téléchargez les résultats d'analyse complets pour une utilisation dans vos projets.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="features-section" style="text-align: center; margin-top: -20px; margin-bottom: 50px;">
+        <h3 style="font-size: 24px; font-weight: 600; color: #2d3748; margin-bottom: 15px;">Prêt à découvrir votre architecture cachée ?</h3>
+        <p style="max-width: 700px; margin: 0 auto 25px auto; font-size: 17px; color: #4a5568;">Transformez vos traces d'exécution en insights architecturaux précieux. Notre analyseur de traces vous attend pour révéler les tactiques qui façonnent votre système.</p>
+        <a href="TactiqueDetector.html" class="action-btn">Analyser vos traces</a>
+    </div>
+
+    <div class="cta-section fade-in">
+        <div class="cta-content">
+            <h2 class="cta-title">Contactez-nous</h2>
+            <p class="cta-text">GrammaTech est basé en Algérie. Notre équipe d'experts est à votre disposition pour répondre à toutes vos questions.</p>
+            <div class="contact-info">
+                <p><strong>Email:</strong> grammatech@esi.dz</p>
+                <p><strong>Téléphone:</strong> +213 555 123 456</p>
+                <p><strong>Adresse:</strong> École Nationale Supérieure d'Informatique (ESI), Oued Smar, Alger, Algérie</p>
+                <p><strong>Heures d'ouverture:</strong> Dimanche au Jeudi, 8h30 à 16h30</p>
+            </div>
+         
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 GrammaTech. Tous droits réservés.
+    </footer>
+
+</body>
+</html>
