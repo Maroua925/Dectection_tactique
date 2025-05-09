@@ -1,8 +1,8 @@
-# Étape 1 : Image de base avec Java
-FROM openjdk:17
+# Étape 1 : Image de base avec Java (Debian-based)
+FROM openjdk:17-slim
 
 # Étape 2 : Installer Node.js
-RUN apt update && apt install -y curl && \
+RUN apt update && apt install -y curl gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt install -y nodejs
 
@@ -15,11 +15,10 @@ COPY . .
 # Installer les dépendances Node.js
 RUN npm install
 
-# Compiler ton analyseur Java (si nécessaire)
-# ⚠️ Modifie ce chemin selon ton projet
+# Compiler ton analyseur Java (modifie le chemin si nécessaire)
 RUN javac -cp . src/analyseur/*.java
 
-# Exposer le port utilisé par ton app Node.js
+# Exposer le port utilisé
 EXPOSE 3000
 
 # Démarrer le serveur Node
