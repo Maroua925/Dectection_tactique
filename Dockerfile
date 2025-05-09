@@ -22,6 +22,6 @@ RUN javac -cp . *.java
 EXPOSE 3000
 
 # Étape 8 : Lancer le serveur Node.js
-CMD ["node", "serveur.js"]
+CMD ["node", "server.js"]
 
 
