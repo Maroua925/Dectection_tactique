@@ -15,11 +15,12 @@ COPY . .
 # Étape 5 : Installer les dépendances Node.js
 RUN npm install
 
-# Étape 6 : Compiler tous les fichiers Java du projet
-RUN javac -cp . *.java src/**/*.java
+# Étape 6 : Compiler tous les fichiers Java du répertoire public
+RUN javac -cp . public/*.java
 
 # Étape 7 : Exposer le port pour Express.js
 EXPOSE 3000
 
 # Étape 8 : Lancer le serveur Node.js
 CMD ["node", "serveur.js"]
+
