@@ -1045,24 +1045,70 @@
       </div>
     </div>
 
-    <!-- Section de guide de format améliorée -->
-    <div class="format-guide">
-      <div class="format-required">
-        <h3>Format requis</h3>
-        <div class="format-code">CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;</div>
-        <p style="margin-top: 10px; color: #5a6270;">Chaque ligne doit suivre strictement ce format pour être traitée correctement.</p>
-      </div>
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Guide de Format</title>
+  <style>
+    .format-guide {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    .format-code {
+      background-color: #eee;
+      padding: 8px;
+      font-family: monospace;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
 
-      <div class="format-example">
-        <h3>Exemple de trace valide</h3>
-        <pre>CALLER:A,METHOD:receive,CALLEE:B;
+<button onclick="toggleGuide()">Afficher le guide de format</button>
+
+<div id="guide" class="format-guide">
+  <div class="format-required">
+    <h3>Format requis</h3>
+    <div class="format-code">CALLER:NomCaller,METHOD:NomMethode,CALLEE:NomCallee;</div>
+    <p style="margin-top: 10px; color: #5a6270;">Chaque ligne doit suivre strictement ce format pour être traitée correctement.</p>
+  </div>
+
+  <div class="format-example">
+    <h3>Exemple de trace valide</h3>
+    <pre>CALLER:A,METHOD:receive,CALLEE:B;
 CALLER:B,METHOD:receive,CALLEE:B;
 CALLER:B,METHOD:receive,CALLEE:B;
 CALLER:A,METHOD:validat,CALLEE:A;
 CALLER:A,METHOD:receive,CALLEE:B;</pre>
-        <p style="margin-top: 10px; color: #5a6270;">Cet exemple montre une trace d'exécution valide qui sera correctement analysée par notre système.</p>
-      </div>
-    </div>
+    <p style="margin-top: 10px; color: #5a6270;">Cet exemple montre une trace d'exécution valide qui sera correctement analysée par notre système.</p>
+  </div>
+</div>
+
+<script>
+  function toggleGuide() {
+    const guide = document.getElementById('guide');
+    guide.style.display = guide.style.display === 'none' ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>
 
 <div class="tactics-section">
     <h2 class="tactics-title">Nos Tactiques</h2>
@@ -1451,7 +1497,3 @@ fileInput.addEventListener('change', function() {
 </body>
 
 </html>
-
-
-
-
