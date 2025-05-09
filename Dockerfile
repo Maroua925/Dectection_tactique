@@ -1,7 +1,7 @@
-# Étape 1 : Image de base avec Java et support APT (Debian)
+# Étape 1 : Utiliser une image de base avec Java et Node.js
 FROM openjdk:17-slim
 
-# Étape 2 : Installer Node.js 18
+# Étape 2 : Installer Node.js
 RUN apt update && apt install -y curl gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt install -y nodejs
@@ -15,12 +15,11 @@ COPY . .
 # Étape 5 : Installer les dépendances Node.js
 RUN npm install
 
-# Étape 6 : Compiler les fichiers Java du parseur
-RUN javac -cp . authenticateonetimePasswordTacticGrammaire/*.java
+# Étape 6 : Compiler tous les fichiers Java du projet
+RUN javac -cp . *.java src/**/*.java
 
-# Étape 7 : Exposer le port utilisé par Express.js
+# Étape 7 : Exposer le port pour Express.js
 EXPOSE 3000
 
 # Étape 8 : Lancer le serveur Node.js
 CMD ["node", "serveur.js"]
-
