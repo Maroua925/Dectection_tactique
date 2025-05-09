@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trace Analyzer - GrammaTech</title>
+  <title>TactiqueDetector - TracTech</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -829,7 +829,102 @@
     .format-example h3:before {
       content: '📑';
     }
+.tactics-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin: 30px 0;
+}
 
+.tactic-btn {
+  background-color: #eef0ff;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #3b50ff;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: 2px solid #3b50ff;
+  box-shadow: 0 4px 6px rgba(59, 80, 255, 0.1);
+}
+
+.tactic-btn:hover {
+  background-color: #dce0ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(59, 80, 255, 0.15);
+}
+
+.info-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+.info-modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.4s ease;
+}
+
+.info-modal-header {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #3b50ff;
+  border-bottom: 2px solid #eef0ff;
+  padding-bottom: 10px;
+}
+
+.info-modal-section {
+  margin-bottom: 20px;
+}
+
+.info-modal-section h3 {
+  font-size: 18px;
+  color: #2d3748;
+  margin-bottom: 10px;
+}
+
+.info-modal-section p {
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.info-close-btn {
+  background-color: #3b50ff;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+  display: block;
+  margin-left: auto;
+}
+
+.info-close-btn:hover {
+  background-color: #2a3fec;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
     /* Style amélioré pour le code */
     pre {
       background: white;
@@ -900,6 +995,25 @@
         margin: 0 10px;
       }
     }
+    .tactics-section {
+        text-align: center;
+        margin: 30px 0 20px 0;
+        padding: 0 15px;
+    }
+    
+    .tactics-title {
+        font-size: 24px;
+        color: #4f46e5;
+        margin-bottom: 12px;
+    }
+    
+    .tactics-description {
+        font-size: 16px;
+        color: #4b5563;
+        line-height: 1.5;
+        max-width: 700px;
+        margin: 0 auto 25px auto;
+    }
   </style>
 </head>
 
@@ -950,6 +1064,93 @@ CALLER:A,METHOD:receive,CALLEE:B;</pre>
       </div>
     </div>
 
+<div class="tactics-section">
+    <h2 class="tactics-title">Nos Tactiques</h2>
+    <p class="tactics-description">Voici nos tactiques qui vous aideront à optimiser votre code. Ces approches sont conçues pour améliorer la qualité, la performance et la maintenabilité de vos applications.</p>
+</div>
+<div class="tactics-buttons">
+  <button class="tactic-btn" data-info="auth-id">Authentication ID/Password</button>
+  <button class="tactic-btn" data-info="auth-onetime">Authenticate Onetime Password</button>
+  <button class="tactic-btn" data-info="maintain-data">Maintain Data</button>
+  <button class="tactic-btn" data-info="authorize-user">Authorize User</button>
+  <button class="tactic-btn" data-info="maintain-copies">Maintain Multiple Copies</button>
+</div>
+
+<!-- Fenêtres d'information pour chaque tactique -->
+<div id="auth-id-info" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">Authentication ID/Password</div>
+    <div class="info-modal-section">
+      <h3>Définition</h3>
+      <p>La tactique Authentication ID/Password est un mécanisme de sécurité qui vérifie l'identité d'un utilisateur en exigeant la fourniture d'identifiants uniques (nom d'utilisateur) et d'un secret associé (mot de passe).</p>
+    </div>
+    <div class="info-modal-section">
+      <h3>Importance</h3>
+      <p>Cette tactique est fondamentale pour la sécurité des systèmes car elle constitue la première ligne de défense contre les accès non autorisés. Elle permet de limiter l'accès aux ressources sensibles uniquement aux utilisateurs légitimes.</p>
+    </div>
+    <button class="info-close-btn">Fermer</button>
+  </div>
+</div>
+
+<div id="auth-onetime-info" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">Authenticate Onetime Password</div>
+    <div class="info-modal-section">
+      <h3>Définition</h3>
+      <p>Cette tactique utilise des mots de passe à usage unique qui ne sont valides que pour une seule session ou transaction, généralement générés à la demande et avec une durée de validité limitée.</p>
+    </div>
+    <div class="info-modal-section">
+      <h3>Importance</h3>
+      <p>Les mots de passe à usage unique offrent une sécurité renforcée par rapport aux mots de passe statiques, car ils ne peuvent pas être réutilisés après leur utilisation initiale, protégeant ainsi contre les attaques par rejeu et le vol de mot de passe.</p>
+    </div>
+    <button class="info-close-btn">Fermer</button>
+  </div>
+</div>
+
+<div id="maintain-data-info" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">Maintain Data</div>
+    <div class="info-modal-section">
+      <h3>Définition</h3>
+      <p>La tactique Maintain Data concerne la persistance et la gestion des données dans un système, incluant leur stockage, leur mise à jour et leur récupération de manière fiable et cohérente.</p>
+    </div>
+    <div class="info-modal-section">
+      <h3>Importance</h3>
+      <p>Cette tactique est essentielle pour garantir l'intégrité des données au fil du temps, permettant aux applications de retrouver leur état antérieur après un redémarrage et d'assurer la continuité des services malgré les pannes potentielles.</p>
+    </div>
+    <button class="info-close-btn">Fermer</button>
+  </div>
+</div>
+
+<div id="authorize-user-info" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">Authorize User</div>
+    <div class="info-modal-section">
+      <h3>Définition</h3>
+      <p>Cette tactique détermine les droits d'accès d'un utilisateur authentifié aux ressources du système, en fonction de son identité, de ses rôles ou de ses attributs.</p>
+    </div>
+    <div class="info-modal-section">
+      <h3>Importance</h3>
+      <p>L'autorisation est cruciale pour la sécurité car elle applique le principe du moindre privilège, garantissant que les utilisateurs n'ont accès qu'aux ressources nécessaires à leurs fonctions, limitant ainsi l'impact potentiel des compromissions.</p>
+    </div>
+    <button class="info-close-btn">Fermer</button>
+  </div>
+</div>
+
+<div id="maintain-copies-info" class="info-modal">
+  <div class="info-modal-content">
+    <div class="info-modal-header">Maintain Multiple Copies</div>
+    <div class="info-modal-section">
+      <h3>Définition</h3>
+      <p>Cette tactique consiste à maintenir plusieurs copies identiques des données ou des composants du système, généralement sur des serveurs ou des emplacements physiques différents.</p>
+    </div>
+    <div class="info-modal-section">
+      <h3>Importance</h3>
+      <p>La réplication des données améliore la disponibilité et la fiabilité du système en permettant la récupération après une défaillance. Elle peut également améliorer les performances en distribuant la charge de travail entre plusieurs instances et en réduisant la latence pour les utilisateurs géographiquement dispersés.</p>
+    </div>
+    <button class="info-close-btn">Fermer</button>
+  </div>
+</div>
     <div class="upload-section">
       <p>Commencez votre analyse de trace d'exécution</p>
 
@@ -999,7 +1200,28 @@ CALLER:A,METHOD:receive,CALLEE:B;</pre>
       const analyzeBtn = document.getElementById('analyzeBtn');
       const tacticModal = document.getElementById('tacticModal');
       const tacticInput = document.getElementById('tacticInput');
+// Gestion des fenêtres d'information pour les tactiques
+document.querySelectorAll('.tactic-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const infoId = this.dataset.info + '-info';
+    document.getElementById(infoId).style.display = 'block';
+  });
+});
 
+document.querySelectorAll('.info-close-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.closest('.info-modal').style.display = 'none';
+  });
+});
+
+// Fermer les fenêtres modales lorsqu'on clique en dehors
+window.addEventListener('click', function(event) {
+  document.querySelectorAll('.info-modal').forEach(modal => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
       // Fonction améliorée pour valider le fichier de trace
 function validateTraceFile(fileContent) {
   const lines = fileContent.trim().split('\n');
@@ -1054,6 +1276,9 @@ function validateTraceFile(fileContent) {
     errorCount: errors.length
   };
 }
+  fileInput.addEventListener('click', function () {
+  this.value = null;
+});
       // Gestionnaire amélioré pour le changement de fichier
 fileInput.addEventListener('change', function() {
   const fileNameSpan = document.getElementById('file-name');
@@ -1219,12 +1444,14 @@ fileInput.addEventListener('change', function() {
   </div>
 
   <footer>
-    &copy; 2025 GrammaTech. Tous droits réservés.
+    &copy; 2025 TracTech Tous droits réservés.
   </footer>
 
 
 </body>
 
 </html>
+
+
 
 
