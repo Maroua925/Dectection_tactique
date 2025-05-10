@@ -159,7 +159,7 @@ public class AuthenticateIDPasswordTacticGrammaire implements AuthenticateIDPass
          for (int i = 3; i >= 0; i--) {
                 System.out.println("Recursive call detected in E() at line " + (caller.beginLine - i));
                    }
-        System.out.println("La tactique prend fin ligne dans la ligne " + caller.beginLine );
+        System.out.println("La tactique prend fin dans ligne dans la ligne " + caller.beginLine );
                     System.out.println("Objets participants a la tactique :");
                     System.out.println( "Objet 1  -> " + var.get("Addclr"));
                     System.out.println( "Objet 2  -> " + var.get("Addcle"));
