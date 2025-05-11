@@ -315,7 +315,7 @@ public class MaintainMultipleCopieTacticGrammaire implements MaintainMultipleCop
 
       }
     } else {
-    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);tempvr.put("caller", getToken(2).image);B();
+    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);B();
     }
   }
 
