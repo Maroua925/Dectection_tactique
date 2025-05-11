@@ -242,8 +242,7 @@ public class MaintainMultipleCopieTacticGrammaire implements MaintainMultipleCop
 
           System.out.println("La tactique prend fin dans la ligne " + line );
 
-          var.put("Addclr", caller.image);
-          var.put("Addcle", callee.image);
+          var.put("Addclr", callee.image);
 
           tempvr.put("caller", caller.image);
 
@@ -261,7 +260,7 @@ public class MaintainMultipleCopieTacticGrammaire implements MaintainMultipleCop
 
       }
     } else {
-    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(2).image);var.put("Addcle", getToken(8).image);tempvr.put("caller", getToken(2).image);B();
+    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);tempvr.put("caller", getToken(2).image);B();
     }
   }
 
@@ -316,7 +315,7 @@ public class MaintainMultipleCopieTacticGrammaire implements MaintainMultipleCop
 
       }
     } else {
-    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addcle", getToken(8).image);tempvr.put("caller", getToken(2).image);var.put("Addclr", getToken(2).image);B();
+    System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);tempvr.put("caller", getToken(2).image);B();
     }
   }
 
