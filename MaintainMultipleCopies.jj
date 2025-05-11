@@ -4,449 +4,243 @@ options {
 
 }
 
-
-
 PARSER_BEGIN(MaintainMultipleCopieTacticGrammaire)
 
-
-
 import java.util.ArrayList;
-
 import java.util.HashMap;
-
 import java.util.Map;
-
 import java.util.Iterator;
-
 import java.util.Set;
-
 import java.io.File;
-
 import java.io.FileInputStream;
 
-
-
 public class MaintainMultipleCopieTacticGrammaire {
-
   public static Map<String, String> map = new HashMap<String, String>();
-
   public static Map<String, String> temp = new HashMap<String, String>();
-
   public static Map<String, String> var = new HashMap<String, String>();
-
   public static Map<String, String> tempvr = new HashMap<String, String>();
-
  
-
   public static Token exceptionHandlingCallee;
-
   public static Map<String, String> tacticParticipatingObjects = new HashMap<String, String>();
-
   public static int numberofChecks = 0;
-
    public static int line = 0;
 
-
-
   // Méthode pour obtenir le fichier le plus récent dans un dossier
-
   private static File getLatestFile(String dirPath) {
-
     File dir = new File(dirPath);
-
     File[] files = dir.listFiles();
-
     if (files == null || files.length == 0) {
-
       return null;
-
     }
-
-
 
     File lastModifiedFile = files[0];
-
     for (int i = 1; i < files.length; i++) {
-
       if (files[i].lastModified() > lastModifiedFile.lastModified()) {
-
         lastModifiedFile = files[i];
-
       }
-
     }
-
     return lastModifiedFile;
-
   }
-
-
 
   public static void main(String args[]) throws ParseException {
-
     try {
-
       // Chemin vers le dossier uploads - à adapter
-
        String uploadsDirPath = System.getProperty("user.dir") + File.separator + "uploads";
-
       File latestFile = getLatestFile(uploadsDirPath);
-
      
-
       if (latestFile == null) {
-
         System.out.println("Aucun fichier trouvé dans le dossier uploads");
-
         return;
-
       }
-
      
-
       System.out.println("Analyse du fichier: " + latestFile.getName());
-
       MaintainMultipleCopieTacticGrammaire parser =
-
           new MaintainMultipleCopieTacticGrammaire(new FileInputStream(latestFile));
 
-
-
       try {
-
         parser.MaintainMultipleCopie();
-
         System.out.println("Number of checks: " + numberofChecks);
-
       } catch (Exception e) {
-
         System.out.println("Erreur lors de l'analyse:");
-
         e.printStackTrace();
-
       }
-
     } catch(Exception e) {
-
       System.out.println("Erreur d'initialisation:");
-
       e.printStackTrace();
-
     }
-
   }
-
 }
-
-
 
 PARSER_END(MaintainMultipleCopieTacticGrammaire)
 
-
-
 SKIP : { " " | "\t" | "\n" | "\r" }
 
-
-
 TOKEN : {< LITERAL : (["a"-"z", "A"-"Z"])+ >}
-
 TOKEN : {< OBJ : (["a"-"z"])+ >}
-
 TOKEN : {< Method_Signature: "~"(["a"-"z"])+ > }
-
 TOKEN : {< OBJJ : (["a"-"z"])+ >}
-
 TOKEN : {< CALLER :"CALLER:">}
-
 TOKEN : {< CALLEE :"CALLEE:">}
-
 TOKEN : {< METHOD :"METHOD:">}
-
 TOKEN : {< COMMA :",">}
-
 TOKEN : {< COMMAP :";">}
 
-
-
 void MaintainMultipleCopie(): {}
-
 {
-
   A() C()
-
 }
-
-
 
 void A(): { Token caller,tempvar , callee, Addclr, Addcle; }
-
 {
-
   <CALLER>
-
   caller = <LITERAL> { map.put("caller", caller.image); }
-
   <COMMA> M()
-
   callee = <LITERAL> { map.put("callee", callee.image); }
-
   { var.put("Addclr", callee.image); }
-
   <COMMAP>
-
   {
-
      temp.put("tempvar", caller.image);
-
      tempvr.put("caller", caller.image);
-
     if (map.get("caller").equals(map.get("callee"))) {
-
       C();
-
     }
-
     else {
-
       B();
-
       return;
-
     }
-
   }
-
 }
 
-
-
-void B(): { Token caller, callee; }
-
+void B(): { Token caller, callee,tempvar,Addclr; }
 {
-
   LOOKAHEAD({getToken(2).image.equals(map.get("callee"))})
-
   (
-
     <CALLER>
-
     caller = <LITERAL>
-
     <COMMA> M()
-
     callee = <LITERAL>
-
     <COMMAP>
-
     {
-
       if ((caller.image.equals(callee.image))|| callee.image.equals(map.get("caller"))) {
-
-        C();
-
-      }
-
-      else {
-
-        System.out.println("____________________________________________________________________________");
-
-        System.out.println("La tactique correspondante se trouve dans la ligne " + ( caller.beginLine - 1) );
-
-        for (int i = 1; i >= 0; i--) {
-
-          System.out.println("Recursive call detected in E() at line " + (caller.beginLine - i));
-
+        if (caller.image.equals(callee.image)){C();}
+        else {
+          { map.put("caller", caller.image); }
+          { map.put("callee", callee.image); }
+          temp.put("tempvar", caller.image);
+          tempvr.put("caller", caller.image);
+          var.put("Addclr", callee.image);
+          B();
         }
-
-        line= caller.beginLine;
-
-        tacticParticipatingObjects.put("callee in E", callee.image);
-
-        tacticParticipatingObjects.put("caller in E", caller.image);
-
-        numberofChecks++;
-
-        System.out.println("Objets participants a la tactique: ");
-
-        System.out.println("Objet 1  -> "+tempvr.get("caller"));
-
-        System.out.println("Objet 2  -> "+caller);
-
-        System.out.println("Objet 3  -> "+callee);
-
-        var.put("Addcle", callee.image);
-
-        D();
-
       }
-
+      else {
+        System.out.println("____________________________________________________________________________");
+        System.out.println("La tactique correspondante se trouve dans la ligne " + ( caller.beginLine - 1) );
+        for (int i = 1; i >= 0; i--) {
+          System.out.println("Recursive call detected in E() at line " + (caller.beginLine - i));
+        }
+        line= caller.beginLine;
+        tacticParticipatingObjects.put("callee in E", callee.image);
+        tacticParticipatingObjects.put("caller in E", caller.image);
+        numberofChecks++;
+        System.out.println("Objets participants a la tactique: ");
+        System.out.println("Objet 1  -> "+tempvr.get("caller"));
+        System.out.println("Objet 2  -> "+caller);
+        System.out.println("Objet 3  -> "+callee);
+        var.put("Addcle", callee.image);
+        D();
+      }
     }
-
     { map.put("caller", caller.image); }
-
     { map.put("callee", callee.image); }
-
   )
-
   | { C(); }
-
 }
-
-
 
 void D(): { Token caller, tempvar, callee; }
-
 {
-
   LOOKAHEAD({getToken(2).image.equals(var.get("Addclr"))})
-
   (
-
     <CALLER>
-
     caller = <LITERAL> { map.put("caller", caller.image); }
-
     <COMMA> M()
-
     callee = <LITERAL> { map.put("callee", callee.image); }
-
     <COMMAP>
-
     {
-
       if (map.get("callee").equals(map.get("caller"))) {
-
         System.out.println("La tactique prend fin dans la ligne " + line );
-
         C();
-
         return;
-
       }
-
       else {
-
+        
         if (map.get("callee").equals(var.get("Addcle")) || map.get("callee").equals(temp.get("tempvar"))) {
-
           System.out.println("La tactique prend fin dans la ligne " + line );
-
+           { map.put("caller", caller.image); }
+          { map.put("callee", callee.image); }
           var.put("Addclr", callee.image);
-
+          temp.put("tempvar", caller.image);
           tempvr.put("caller", caller.image);
-
           B();
-
         }
-
         else {
-
           tempvr.put("callee", callee.image);
-
+          tempvr.put("caller", caller.image);
+                    
           G();
-
         }
-
       }
-
     }
-
   )
-
-  |{System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);tempvr.put("caller", getToken(2).image);B();}
-
+  |{ System.out.println("La tactique prend fin dans la ligne " + line );C(); }
 }
-
-
 
 void G(): { Token caller, callee; }
-
 {
-
   LOOKAHEAD({getToken(2).image.equals(var.get("Addclr"))})
-
   (
-
     <CALLER>
-
     caller = <LITERAL> { map.put("caller", caller.image); }
-
     <COMMA> M()
-
     callee = <LITERAL> { map.put("callee", callee.image); }
-
     <COMMAP>
-
     {
-
       if (!(map.get("callee").equals(var.get("Addcle")))) {
-
         if (map.get("callee").equals(map.get("caller"))) {
-
           System.out.println("La tactique prend fin dans la ligne " + line );
-
           C();
-
         }
-
         else {
-
           System.out.println("La tactique prend fin dans la ligne " + line );
-
-          { var.put("Addclr", caller.image); }
-
-          {tempvr.put("caller", caller.image);}
-          var.put("Addcle", callee.image);
-
+           { map.put("caller", caller.image); }
+          { map.put("callee", callee.image); }
+          var.put("Addclr", callee.image);
+          temp.put("tempvar", caller.image);
+          tempvr.put("caller", caller.image);
           B();
-
         }
-
       }
-
     }
-
     {
-
       if ((map.get("callee").equals(var.get("Addcle")))) {
-
         for (int i = 1; i >= 0; i--) {
-
           System.out.println("Recursive call detected in E() at line " + (caller.beginLine - i));
-
         }
-
         System.out.println("Objet 4 -> "+tempvr.get("callee"));
-
         System.out.println("Cette tactique inclut un bloc optionnel.");
-
         System.out.println("La tactique prend fin dans la ligne " + caller.beginLine );
-
       }
-
     }
-
   )
-
-  |{System.out.println("La tactique prend fin dans la ligne " + line );var.put("Addclr", getToken(8).image);B();}
-
+  |{System.out.println("La tactique prend fin dans la ligne " + line ); temp.put("tempvar", getToken(2).image);
+  var.put("Addclr", getToken(8).image);B();}
 }
-
-
 
 void C(): { Token caller, callee; }
-
 {
-
   ( A() C() )?
-
 }
 
-
-
 void M(): {}
-
 {
-
   <METHOD> <LITERAL> <COMMA> <CALLEE>
-
 }
